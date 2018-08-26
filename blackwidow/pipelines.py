@@ -4,9 +4,12 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
+import hashlib
+
 from scrapy import Request
 from scrapy.exceptions import DropItem
 from scrapy.pipelines.images import ImagesPipeline
+from scrapy.utils.python import to_bytes
 
 
 class BlackwidowPipeline(object):
@@ -25,7 +28,8 @@ class ImgDownloadPipeline(ImagesPipeline):
     def get_media_requests(self, item, info):
         for image_url in item['image_urls']:
             self.default_headers['referer'] = image_url
-            yield Request(image_url, headers=self.default_headers)
+            img_dir = item['image_dir']
+            yield Request(image_url, headers=self.default_headers, meta={"dir": img_dir})
 
     def item_completed(self, results, item, info):
         image_paths = [x['path'] for ok, x in results if ok]
@@ -33,3 +37,13 @@ class ImgDownloadPipeline(ImagesPipeline):
             raise DropItem("Item contains no images")
         item['image_paths'] = image_paths
         return item
+
+    def file_path(self, request, response=None, info=None):
+        # 图片路径
+        image_dir = request.meta['dir']
+        if image_dir is None:
+            image_dir = 'full'
+        # 图片名字
+        url = request.url
+        image_guid = hashlib.sha1(to_bytes(url)).hexdigest()  # change to request.url after deprecation
+        return '%s/%s.jpg' % (image_dir, image_guid)

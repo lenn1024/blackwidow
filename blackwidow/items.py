@@ -16,5 +16,6 @@ class BlackwidowItem(scrapy.Item):
 
 class ImgItem(scrapy.Item):
     image_urls = Field()
+    image_dir = Field()
     images = Field()
     image_paths = Field()
