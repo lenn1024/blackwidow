@@ -16,18 +16,20 @@ class BlackwidowPipeline(object):
     def process_item(self, item, spider):
         return item
 
+
 class ImgDownloadPipeline(ImagesPipeline):
     default_headers = {
         'accept': 'image/webp,image/*,*/*;q=0.8',
         'accept-encoding': 'gzip, deflate, sdch, br',
         'accept-language': 'zh-CN,zh;q=0.8,en;q=0.6',
+        'Host': 'img.hb.aicdn.com',
         # 'Referer': 'http://www.mmjpg.com',
         'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36',
     }
 
     def get_media_requests(self, item, info):
         for image_url in item['image_urls']:
-            self.default_headers['referer'] = image_url
+            # self.default_headers['referer'] = image_url
             img_dir = item['image_dir']
             yield Request(image_url, headers=self.default_headers, meta={"dir": img_dir})
 

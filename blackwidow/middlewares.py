@@ -6,6 +6,7 @@
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
+from blackwidow.configs import *
 
 
 class BlackwidowSpiderMiddleware(object):

@@ -7,7 +7,7 @@ from blackwidow.items import ImgItem
 class MingxingSpider(scrapy.Spider):
     name = 'mingxing'
     allowed_domains = ['www.mingxing.com']
-    start_urls = ['http://www.mingxing.com/tuku/index/id/307782.html']
+    start_urls = ['http://www.mingxing.com/tuku/index/id/307174.html']
     image_dir = 'mingxing'
 
     def parse(self, response):

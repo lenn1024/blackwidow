@@ -94,7 +94,22 @@ ITEM_PIPELINES = {
     'blackwidow.pipelines.ImgDownloadPipeline': 300
 }
 
-#设置图片下载路径
+# 设置图片下载路径
 IMAGES_STORE = '/Users/lenn/Pictures'
 # 过期天数
 IMAGES_EXPIRES = 30  # 30天内抓取的都不会被重抓
+
+############## splash设置 ###############
+# 渲染服务的url
+SPLASH_URL = 'http://127.0.0.1:8050'
+
+# 下载器中间件
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy_splash.SplashCookiesMiddleware': 723,
+    'scrapy_splash.SplashMiddleware': 725,
+    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
+}
+# 去重过滤器
+DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
+# 使用Splash的Http缓存
+HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
