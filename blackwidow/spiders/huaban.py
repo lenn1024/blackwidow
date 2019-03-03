@@ -12,7 +12,7 @@ class HuabanSpider(scrapy.Spider):
     name = 'huaban'
     allowed_domains = ['huaban.com']
     # start_urls = ['http://huaban.com/boards/37953848/?jltb7rdb&max=1230203890&limit=182']
-    start_urls = ['http://huaban.com/boards/14300460/'
+    start_urls = ['http://huaban.com/boards/14355664/'
                   # 'http://huaban.com/boards/46948705/',
                   # 'http://huaban.com/boards/46929901/',
                   # 'http://huaban.com/boards/46947831/',
@@ -38,7 +38,7 @@ class HuabanSpider(scrapy.Spider):
         # 封装splash request
         for url in self.start_urls:
             yield SplashRequest(url=url, callback=self.parse,
-                                args={'wait': 1}, endpoint='render.html')
+                                args={'wait': 5}, endpoint='render.html')
 
     def parse(self, response):
         max_pin = ''
@@ -48,7 +48,7 @@ class HuabanSpider(scrapy.Spider):
             if result:
                 url = self.root_path + href
                 yield SplashRequest(url=url, callback=self.parse_detail,
-                                args={'wait': 1}, endpoint='render.html')
+                                args={'wait': 5}, endpoint='render.html')
                 # 记录max_pin
                 max_pin = result.group(1)
 
@@ -63,7 +63,7 @@ class HuabanSpider(scrapy.Spider):
             for pin in pins:
                 url = self.root_path + '/pins/' + str(pin['pin_id'])
                 yield SplashRequest(url=url, callback=self.parse_detail,
-                                    args={'wait': 1}, endpoint='render.html')
+                                    args={'wait': 5}, endpoint='render.html')
             # 继续构造json请求
             max_pin = pins[-1]
             json_url = self.generateJsonUrl(max_pin)
